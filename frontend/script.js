@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', async function()
         }
         const students = await response.json();
         console.log(students);
+        const testRow1 = document.getElementById("row1");
+        testRow1.textContent = students[0].NAME;
     }
     catch (error)
     {

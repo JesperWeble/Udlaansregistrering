@@ -44,7 +44,7 @@ app.get('/students', async (req, res) =>
     try
     {
         const students = await getDataFromDatabase();
-        res.json({Students: students});
+        res.json(students);
     }
     catch (err)
     {
