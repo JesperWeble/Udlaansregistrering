@@ -1,5 +1,9 @@
+const express = require('express') // Express allows for sending data to frontend
 const oracleDatabase = require('oracledb');
-const config = require ('./config');
+const config = require ('./config'); // Where passwords and such for the database is written.
+const app = express(); // creates an app that can be interacted with for Express.
+
+const port = 3000;
 
 async function getDataFromDatabase()
 {
@@ -25,4 +29,21 @@ async function getDataFromDatabase()
         }
     }
 }
-getDataFromDatabase();
+// Send data to Frontend
+app.get('/students', async (request, response) =>
+{
+    try
+    {
+        const students = await getDataFromDatabase();
+        response.json(students);
+    }
+    catch (err)
+    {
+        response.status(500).send('Error fetching student data.');
+    }
+})
+
+app.listen(port, () =>
+{
+    console.log(`Server is running on http://localhost:${port}`);
+});
