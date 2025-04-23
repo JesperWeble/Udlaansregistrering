@@ -2,7 +2,9 @@ const express = require('express') // Express allows for sending data to fronten
 const oracleDatabase = require('oracledb');
 const config = require ('./config'); // Where passwords and such for the database is written.
 const app = express(); // creates an app that can be interacted with for Express.
+const cors = require('cors'); // a security feature in web browsers
 
+app.use(cors());
 const port = 3000;
 
 async function getDataFromDatabase()
@@ -10,11 +12,18 @@ async function getDataFromDatabase()
     let connection;
     try
     {
-         connection = await oracleDatabase.getConnection(config.dbConfig);
-         console.log('Success!')
+        connection = await oracleDatabase.getConnection(config.dbConfig);
+        console.log('Success!')
 
-         const result = await connection.execute('SELECT * FROM STUDENT');
-         console.log('Students are: ', result.rows)
+        const result = await connection.execute
+        (
+            'SELECT * FROM STUDENT',
+            [],
+            {outFormat: oracleDatabase.OUT_FORMAT_OBJECT}
+        );
+        console.log('Students are: ', result.rows)
+
+        return result.rows;
 
     } 
     catch (err) 
@@ -30,16 +39,16 @@ async function getDataFromDatabase()
     }
 }
 // Send data to Frontend
-app.get('/students', async (request, response) =>
+app.get('/students', async (req, res) =>
 {
     try
     {
         const students = await getDataFromDatabase();
-        response.json(students);
+        res.json({Students: students});
     }
     catch (err)
     {
-        response.status(500).send('Error fetching student data.');
+        res.status(500).send('Error fetching student data.');
     }
 })
 
