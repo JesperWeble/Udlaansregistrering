@@ -7,7 +7,7 @@ const cors = require('cors'); // a security feature in web browsers
 app.use(cors());
 const port = 3000;
 
-async function getDataFromDatabase()
+async function getDataFromDatabase(table)
 {
     let connection;
     try
@@ -17,13 +17,13 @@ async function getDataFromDatabase()
 
         const result = await connection.execute
         (
-            'SELECT * FROM STUDENT',
+            `SELECT * FROM ${table}`,
             [],
             {outFormat: oracleDatabase.OUT_FORMAT_OBJECT}
         );
-        console.log('Students are: ', result.rows)
+        console.log(`${table} are: ${result.rows}`)
+        return resultData = result.rows;
 
-        return result.rows;
 
     } 
     catch (err) 
@@ -39,18 +39,21 @@ async function getDataFromDatabase()
     }
 }
 // Send data to Frontend
-app.get('/students', async (req, res) =>
+app.get('/:table', async (req, res) =>
 {
+    const tableName = req.params.table.toUpperCase();
+    console.log("App ", tableName)
     try
     {
-        const students = await getDataFromDatabase();
-        res.json(students);
+        const data = await getDataFromDatabase(tableName);
+        res.json(data);
+        console.log(data)
     }
     catch (err)
     {
-        res.status(500).send('Error fetching student data.');
+        res.status(500).send(`Error fetching ${tableName} data.`);
     }
-})
+});
 
 app.listen(port, () =>
 {
