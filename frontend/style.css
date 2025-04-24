@@ -9,7 +9,7 @@ body {
   overflow: hidden;
   background: #000;
 }
-.row_container {
+#row_container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,12 +19,20 @@ body {
   background: #050f05;
   box-sizing: border-box;
   padding: 10px;
+  overflow-y: auto;
 }
-.row_container .rows {
+#row_container .rows {
   width: 100%;
   height: 50px;
-  outline: 2px solid #fff;
+  outline: 2px solid #363636;
   background: #0f0f0f;
   color: #0f0;
   margin-bottom: 20px;
+  padding-left: 5px;
+  align-content: center;
+}
+#row_container .rows:hover {
+  background: #12131d;
+  outline: 2px solid #ad9fc4;
+  color: #9eff9e;
 }
