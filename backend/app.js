@@ -38,6 +38,7 @@ async function getDataFromDatabase(table)
         }
     }
 }
+
 // Send data to Frontend
 app.get('/:table', async (req, res) =>
 {
@@ -59,3 +60,4 @@ app.listen(port, () =>
 {
     console.log(`Server is running on http://localhost:${port}`);
 });
+
