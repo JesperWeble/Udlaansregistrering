@@ -29,10 +29,10 @@ async function fetchData(tableName)
             throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        console.log
-        (
-            '%c'+`[--- ${tableName.toUpperCase()} ---]:`, 'font-size: 14px; font-weight: bold; color: blue;', data
-        );
+        // console.log
+        // (
+        //     '%c'+`[--- ${tableName.toUpperCase()} ---]:`, 'font-size: 14px; font-weight: bold; color: blue;', data
+        // );
         return data;
 
     }
@@ -47,22 +47,34 @@ async function addToTab(tableName)
 {
     const rowContainer = document.getElementById(`${tableName}_container`);
     const data = tablesData[tableName];
-    console.log(data)
+    // console.log(data)
     var i = 0;
     data.forEach(tableName => {
         i++
         var newRow = document.createElement("li");
         var newRowDetails = document.createElement("div");
+        var dataParagraph = document.createElement("p");
         // newRow.className = "rows"; newRow.id = "row" + i;
         newRow.className = "rows"; newRow.id = Object.values(tableName)[1];
-        // newRow.onclick = "toggleDetails";
+        newRow.onclick = toggleDetails;
         newRow.textContent = Object.values(tableName)[1];
         rowContainer.appendChild(newRow);
         newRowDetails.className ="rowDetails";
-        newRowDetails.textContent = "Test";
+        dataParagraph.innerHTML =
+        `
+        Address: ${Object.values(tableName)[2]}<br>
+        City: ${Object.values(tableName)[3]}<br>
+        CPR: ${Object.values(tableName)[4]}<br>
+        `;
         newRow.appendChild(newRowDetails);
+        newRowDetails.appendChild(dataParagraph);
 
     });
+}
+
+async function toggleDetails(detailToShow)
+{
+    console.log('Test')
 }
 
 // Change displayed data
@@ -74,7 +86,9 @@ async function tab(tableToDisplay)
     });
     const tableContainer = document.getElementById(`${tableToDisplay}_container`);
     tableContainer.style.display = 'flex';
-    console.log(tableToDisplay + " was clicked");
+
+
+    console.log(Object.values(tableToDisplay)[2]);
 
     
 }
