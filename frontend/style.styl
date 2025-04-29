@@ -12,7 +12,7 @@ body
     align-items center
     width 100vw
     height 100vh
-    margin 0
+    margin 5px 5px 5px 5px
     padding 0
     overflow hidden
     background black
@@ -20,6 +20,7 @@ body
 .tab
     display flex
     flex-direction column
+    height 98%
 
 .tab_buttons
     display flex
@@ -38,11 +39,11 @@ body
     
     
 
-.row_container
+.table_container
     display none
     list-style-type none
     flex-direction column
-    align-items center
+    align-items left
     height calc(100vh - 20px)
     width calc(100vw - 20px)
     outline 2px solid tabColorBorder
@@ -52,25 +53,27 @@ body
     margin 0
     overflow-y auto
     overflow-x hidden
-    .rows
-        width 100%
-        height auto
+    .tables
         color tabColorText
         margin-bottom 20px
-        padding-left 5px
-        align-content center
         &:hover
             background tabHighlightBG
             outline 2px solid tabHighlightBorder
             color tabHighlightText
             cursor pointer
-        .rowDetails
-            // width 100%
-            // display block
+        .tableRows
+            display none
+            width 100%
             color white
-            p
-                margin 0
+            border-bottom 1px solid tabColorBorder
+            .tableKeyCell, .tableValueCell
+                width 50%
                 padding 0
+                margin 0
 
 #student_container
     display flex
+
+h4, h3
+    margin 0
+    padding 0

@@ -4,7 +4,7 @@ body {
   align-items: center;
   width: 100vw;
   height: 100vh;
-  margin: 0;
+  margin: 5px 5px 5px 5px;
   padding: 0;
   overflow: hidden;
   background: #000;
@@ -12,6 +12,7 @@ body {
 .tab {
   display: flex;
   flex-direction: column;
+  height: 98%;
 }
 .tab_buttons {
   display: flex;
@@ -30,11 +31,11 @@ body {
   color: #9eff9e;
   cursor: pointer;
 }
-.row_container {
+.table_container {
   display: none;
   list-style-type: none;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
   height: calc(100vh - 20px);
   width: calc(100vw - 20px);
   outline: 2px solid #003700;
@@ -45,27 +46,33 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
 }
-.row_container .rows {
-  width: 100%;
-  height: auto;
+.table_container .tables {
   color: #0f0;
   margin-bottom: 20px;
-  padding-left: 5px;
-  align-content: center;
 }
-.row_container .rows:hover {
+.table_container .tables:hover {
   background: #12131d;
   outline: 2px solid #6b8a59;
   color: #9eff9e;
   cursor: pointer;
 }
-.row_container .rows .rowDetails {
+.table_container .tables .tableRows {
+  display: none;
+  width: 100%;
   color: #fff;
+  border-bottom: 1px solid #003700;
 }
-.row_container .rows .rowDetails p {
-  margin: 0;
+.table_container .tables .tableRows .tableKeyCell,
+.table_container .tables .tableRows .tableValueCell {
+  width: 50%;
   padding: 0;
+  margin: 0;
 }
 #student_container {
   display: flex;
+}
+h4,
+h3 {
+  margin: 0;
+  padding: 0;
 }

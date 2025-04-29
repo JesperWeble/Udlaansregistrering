@@ -29,10 +29,6 @@ async function fetchData(tableName)
             throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        // console.log
-        // (
-        //     '%c'+`[--- ${tableName.toUpperCase()} ---]:`, 'font-size: 14px; font-weight: bold; color: blue;', data
-        // );
         return data;
 
     }
@@ -45,43 +41,67 @@ async function fetchData(tableName)
 // Create html elements for the table to display the data.
 async function addToTab(tableName)
 {
-    const rowContainer = document.getElementById(`${tableName}_container`);
+    const tableContainer = document.getElementById(`${tableName}_container`);
     const data = tablesData[tableName];
-    // console.log(data)
-    var i = 0;
-    data.forEach(tableName => {
-        i++
-        var newRow = document.createElement("li");
-        var newRowDetails = document.createElement("div");
-        var dataParagraph = document.createElement("p");
-        // newRow.className = "rows"; newRow.id = "row" + i;
-        newRow.className = "rows"; newRow.id = Object.values(tableName)[1];
-        newRow.onclick = toggleDetails;
-        newRow.textContent = Object.values(tableName)[1];
-        rowContainer.appendChild(newRow);
-        newRowDetails.className ="rowDetails";
-        dataParagraph.innerHTML =
-        `
-        Address: ${Object.values(tableName)[2]}<br>
-        City: ${Object.values(tableName)[3]}<br>
-        CPR: ${Object.values(tableName)[4]}<br>
-        `;
-        newRow.appendChild(newRowDetails);
-        newRowDetails.appendChild(dataParagraph);
+    data.forEach(tableName => 
+    {
+        const objectName = Object.values(tableName)[1];
+        const objectEntries = Object.entries(tableName).slice(2);
+        const newTable = document.createElement("table");
+        
+        tableContainer.appendChild(newTable);
+        newTable.className = "tables"; 
+        newTable.id = objectName;
+        newTable.innerHTML = `<h3>${objectName}</h3>`;
+        newTable.onclick = () => toggleDetails(newTable.id);
+        objectEntries.forEach(([key, val]) => 
+        {
+            const newRow = document.createElement("tr");
+            const newColumnKey = document.createElement("td");
+            const newColumnValue = document.createElement("td");
+            newTable.appendChild(newRow);
+            newRow.className = "tableRows";
+            newRow.id = key;
+            
+            newRow.appendChild(newColumnKey);
+            newColumnKey.className = "tableKeyCell";
+            newColumnKey.textContent = key;
 
+            newRow.appendChild(newColumnValue);
+            newColumnValue.className = "tableValueCell";
+            newColumnValue.textContent = val;
+            
+
+            
+
+
+        });
     });
 }
 
-async function toggleDetails(detailToShow)
+async function toggleDetails(tableId)
 {
-    console.log('Test')
-}
+    console.log(tableId);
+    const table = document.getElementById(tableId);
+    const tableRows = Array.from(table.children).filter(child => child.tagName !== 'H3');
+    tableRows.forEach(tableRow => 
+    {
+        if (tableRow.style.display === 'inherit')
+        {
+            tableRow.style.display = 'none';
+        }
+        else
+        {
+            tableRow.style.display = 'inherit';
+        }
+    });
+};
 
 // Change displayed data
 async function tab(tableToDisplay)
 {
     // Hide all containers.
-    document.querySelectorAll('.row_container').forEach(container => {
+    document.querySelectorAll('.table_container').forEach(container => {
         container.style.display = 'none';
     });
     const tableContainer = document.getElementById(`${tableToDisplay}_container`);
