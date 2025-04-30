@@ -107,8 +107,5 @@ async function tab(tableToDisplay)
     const tableContainer = document.getElementById(`${tableToDisplay}_container`);
     tableContainer.style.display = 'flex';
 
-
-    console.log(Object.values(tableToDisplay)[2]);
-
     
 }
