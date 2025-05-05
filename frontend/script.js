@@ -19,9 +19,29 @@ document.addEventListener('DOMContentLoaded', async function()
     (
         '%c'+`[--- Tables ---]:`, 'font-size: 14px; font-weight: bold; color: blue;', tablesData
     );
+
+    // Add loans to students
+    student.forEach(parsedStudent => 
+    {
+        const studentLoan = loan.filter(parsedLoan => parsedLoan.student_id === student.student_id)
+        console.log(studentLoan);
+
+
+    });
+
+    // const computerLoan = loan.filter(parsedLoan => parsedLoan.student_id === student.student_id)
+    // const studentsWithLoan = student.map(parsedStudent =>
+    //     {
+    //     return {
+    //         ...student,
+    //         loan: loans.filter(parsedLoan => parsedLoan.student_id === parsedStudent.student_id)
+    //     };
+    // });
+
+
     addToTab('student')
     addToTab('computer')
-    joinForeignKeys(tablesData, 'student');
+    // joinForeignKeys(tablesData, 'student');
 
 
 
@@ -81,6 +101,7 @@ async function addToTab(tableName)
         });
        
     });
+    
 }
 
 
@@ -114,35 +135,47 @@ async function tab(tableToDisplay)
     
 }
 
-/**
- * @param {var} fullData - All the data that must be checked for foreign keys to join unto the object.
- * @param {var} tableName - The table that the foreign keys will be joined unto.
- */
-async function joinForeignKeys(fullData, tableName)
-{
-    const table = fullData[tableName];
-    console.log(table);
+// /**
+//  * @param {var} fullData - All the data that must be checked for foreign keys to join unto the object.
+//  * @param {var} tableName - The table that the foreign keys will be joined unto.
+//  */
 
-    // tableName.forEach
-    // const tableArray = [tableName];
-    // const fullDataArray = [fullData];
+// async function joinForeignKeys(fullData, tableName)
+// {
+    
+//     const table = fullData[tableName];
+//     console.log(table);
+//     const dataArray = Object.entries(fullData) // Take the fullData object and put its contents into an array.
+//         .filter(([key]) => key !== tableName) // Removes the table being joined onto from the tables that are joining.
+//     console.log(dataArray);
+    
+    
+//     table.forEach(parsedPrimary =>
+//     {
+//         const theKey = `${Object.keys(parsedPrimary)[0]}`;
+//         console.log(theKey);
+//         dataArray.forEach(([key, value]) => 
+//             {
+//                 console.log(key, value);
+//             });
+//         // dataArray.forEach(parsedForeign =>
+//         // {
+            
+//         // });
 
-    // console.log(tableArray);
-    // const theKey = `${Object.keys(tableArray + "_ID")[1]}_ID`;
-    // console.log(theKey);
-    // const theKey = `${Object.keys(tableName + "_ID")[1]}_ID`;
-    // const fullDataFlat = Object.values(fullData).flat()
-    // const relatedItems = fullDataFlat.filter
-    // (
-    //     item => item[theKey] === object[theKey]
-    // );
-    // relatedItems.forEach(item =>
-    // {
-    //     const nameOfTable = item.constructor.name.toUpperCase();
-    //     const foreignKeyValue = item[`${nameOfTable}_ID`]
-    //     object[nameOfTable] = foreignKeyValue;
-    // });
+//     });
+//     const fullDataFlat = Object.values(fullData).flat()
+//     const relatedItems = fullDataFlat.filter
+//     (
+//         item => item[theKey] === Object[theKey]
+//     );
+//     relatedItems.forEach(item =>
+//     {
+//         const nameOfTable = item.constructor.name.toUpperCase();
+//         const foreignKeyValue = item[`${nameOfTable}_ID`]
+//         Object[nameOfTable] = foreignKeyValue;
+//     });
 
-    // console.log(tableName);
-    // return tableName;
-};
+//     // console.log(tableName);
+//     // return tableName;
+// };
