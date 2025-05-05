@@ -1,24 +1,31 @@
 let tablesData;
+let student;
+let computer;
+let loan;
+let loanDetail;
 
 document.addEventListener('DOMContentLoaded', async function()
 {
     tablesData = 
     {
         student: await fetchData("student"),
-        computer: await fetchData("computer")
+        computer: await fetchData("computer"),
+        loan: await fetchData("loan"),
+        loanDetail: await fetchData("loan_detail")
     };
+    
 
     console.log
-        (
-            '%c'+`[--- Tables ---]:`, 'font-size: 14px; font-weight: bold; color: blue;', tablesData
-        );
+    (
+        '%c'+`[--- Tables ---]:`, 'font-size: 14px; font-weight: bold; color: blue;', tablesData
+    );
     addToTab('student')
     addToTab('computer')
+    joinForeignKeys(tablesData, 'student');
 
 
 
 })
-
 async function fetchData(tableName)
 {
     try
@@ -70,18 +77,15 @@ async function addToTab(tableName)
             newRow.appendChild(newColumnValue);
             newColumnValue.className = "tableValueCell";
             newColumnValue.textContent = val;
-            
-
-            
-
 
         });
+       
     });
 }
 
+
 async function toggleDetails(tableId)
 {
-    console.log(tableId);
     const table = document.getElementById(tableId);
     const tableRows = Array.from(table.children).filter(child => child.tagName !== 'H3');
     tableRows.forEach(tableRow => 
@@ -109,3 +113,36 @@ async function tab(tableToDisplay)
 
     
 }
+
+/**
+ * @param {var} fullData - All the data that must be checked for foreign keys to join unto the object.
+ * @param {var} tableName - The table that the foreign keys will be joined unto.
+ */
+async function joinForeignKeys(fullData, tableName)
+{
+    const table = fullData[tableName];
+    console.log(table);
+
+    // tableName.forEach
+    // const tableArray = [tableName];
+    // const fullDataArray = [fullData];
+
+    // console.log(tableArray);
+    // const theKey = `${Object.keys(tableArray + "_ID")[1]}_ID`;
+    // console.log(theKey);
+    // const theKey = `${Object.keys(tableName + "_ID")[1]}_ID`;
+    // const fullDataFlat = Object.values(fullData).flat()
+    // const relatedItems = fullDataFlat.filter
+    // (
+    //     item => item[theKey] === object[theKey]
+    // );
+    // relatedItems.forEach(item =>
+    // {
+    //     const nameOfTable = item.constructor.name.toUpperCase();
+    //     const foreignKeyValue = item[`${nameOfTable}_ID`]
+    //     object[nameOfTable] = foreignKeyValue;
+    // });
+
+    // console.log(tableName);
+    // return tableName;
+};
