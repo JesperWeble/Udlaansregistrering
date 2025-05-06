@@ -14,28 +14,40 @@ document.addEventListener('DOMContentLoaded', async function()
         loanDetail: await fetchData("loan_detail")
     };
     
+    
 
     console.log
     (
         '%c'+`[--- Tables ---]:`, 'font-size: 14px; font-weight: bold; color: blue;', tablesData
     );
-    joinForeignKeys(tablesData.loanDetail, tablesData.computer, 'foreignKey');
-    joinForeignKeys(tablesData.loanDetail, tablesData.loan, 'foreignKey');
-    joinForeignKeys(tablesData.loan, tablesData.student, 'foreignKey');
 
-    // const computerLoan = loan.filter(parsedLoan => parsedLoan.student_id === student.student_id)
-    // const studentsWithLoan = student.map(parsedStudent =>
-    //     {
-    //     return {
-    //         ...student,
-    //         loan: loans.filter(parsedLoan => parsedLoan.student_id === parsedStudent.student_id)
-    //     };
-    // });
+    // Mapping and Joining
+    for (let parsedStudentKey in tablesData.student)
+    {
+        const parsedStudent = tablesData.student[parsedStudentKey];
+        console.log(parsedStudent)
+        const studentLoan = Object.values(tablesData.loan).find(
+            studentLoan => studentLoan.STUDENT_ID === parsedStudent.STUDENT_ID);
+        if (!studentLoan) continue;
+        console.log(studentLoan)
 
+        const detailsOfLoan = Object.values(tablesData.loanDetail).find(
+            detailsOfLoan => detailsOfLoan.LOAN_ID === studentLoan.LOAN_ID);
+        if (!detailsOfLoan) continue;
+        console.log(detailsOfLoan)
+        const loanedComputer = Object.values(tablesData.computer).find(
+            loanedComputer => loanedComputer.COMPUTER_ID === detailsOfLoan.COMPUTER_ID);
+        if (!loanedComputer) continue;
+        console.log(loanedComputer)
+        parsedStudent.COMPUTER = loanedComputer;
+    };
+    
+    // joinForeignKeys(tablesData.loanDetail, tablesData.computer, 'foreignKey');
+    // joinForeignKeys(tablesData.loanDetail, tablesData.loan, 'foreignKey');
+    // joinForeignKeys(tablesData.loan, tablesData.student, 'foreignKey');
 
     addToTab('student')
     addToTab('computer')
-    // joinForeignKeys(tablesData, 'student');
 
 
 
@@ -151,8 +163,9 @@ async function joinForeignKeys(foreigner, primer, newPropName)
         console.log(parsedForeigner);
         if (parsedForeigner.length > 0)
         {
-            parsedPrimer.foreignKey = parsedForeigner;
-            console.log(parsedPrimer.foreignKey);
+            parsedPrimer[newPropName] = Object.keys(parsedForeigner)[0];
+            console.log('Testing new prop name.');
+            console.log(parsedPrimer[newPropName]);
             
 
         };
@@ -161,48 +174,3 @@ async function joinForeignKeys(foreigner, primer, newPropName)
     console.log(primer);
 
 }
-
-// /**
-//  * @param {var} fullData - All the data that must be checked for foreign keys to join unto the object.
-//  * @param {var} tableName - The table that the foreign keys will be joined unto.
-//  */
-
-// async function joinForeignKeys(fullData, tableName)
-// {
-    
-//     const table = fullData[tableName];
-//     console.log(table);
-//     const dataArray = Object.entries(fullData) // Take the fullData object and put its contents into an array.
-//         .filter(([key]) => key !== tableName) // Removes the table being joined onto from the tables that are joining.
-//     console.log(dataArray);
-    
-    
-//     table.forEach(parsedPrimary =>
-//     {
-//         const theKey = `${Object.keys(parsedPrimary)[0]}`;
-//         console.log(theKey);
-//         dataArray.forEach(([key, value]) => 
-//             {
-//                 console.log(key, value);
-//             });
-//         // dataArray.forEach(parsedForeign =>
-//         // {
-            
-//         // });
-
-//     });
-//     const fullDataFlat = Object.values(fullData).flat()
-//     const relatedItems = fullDataFlat.filter
-//     (
-//         item => item[theKey] === Object[theKey]
-//     );
-//     relatedItems.forEach(item =>
-//     {
-//         const nameOfTable = item.constructor.name.toUpperCase();
-//         const foreignKeyValue = item[`${nameOfTable}_ID`]
-//         Object[nameOfTable] = foreignKeyValue;
-//     });
-
-//     // console.log(tableName);
-//     // return tableName;
-// };
