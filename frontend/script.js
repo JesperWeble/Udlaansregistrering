@@ -19,15 +19,9 @@ document.addEventListener('DOMContentLoaded', async function()
     (
         '%c'+`[--- Tables ---]:`, 'font-size: 14px; font-weight: bold; color: blue;', tablesData
     );
-
-    // Add loans to students
-    student.forEach(parsedStudent => 
-    {
-        const studentLoan = loan.filter(parsedLoan => parsedLoan.student_id === student.student_id)
-        console.log(studentLoan);
-
-
-    });
+    joinForeignKeys(tablesData.loanDetail, tablesData.computer, 'foreignKey');
+    joinForeignKeys(tablesData.loanDetail, tablesData.loan, 'foreignKey');
+    joinForeignKeys(tablesData.loan, tablesData.student, 'foreignKey');
 
     // const computerLoan = loan.filter(parsedLoan => parsedLoan.student_id === student.student_id)
     // const studentsWithLoan = student.map(parsedStudent =>
@@ -133,6 +127,39 @@ async function tab(tableToDisplay)
     tableContainer.style.display = 'flex';
 
     
+}
+
+/**
+ * @param {var} foreigner - The object that will be added to the primer.
+ * @param {var} primer - The object that the foreigner will be added to.
+ * @param {var} newPropName - The name of the new property that will be added to the primer.
+ */
+async function joinForeignKeys(foreigner, primer, newPropName)
+{
+    console.log(`Foreigner`);
+    console.log(foreigner);
+    for (let parsedPrimerKey in foreigner)
+    {
+        const parsedPrimer = primer[parsedPrimerKey];
+        const theKey = Object.keys(parsedPrimer)[0];
+        const parsedForeigner = Object.values(foreigner).filter(parsedForeigner => 
+        {
+            return parsedForeigner[theKey] === parsedPrimer[theKey];
+
+        });
+        console.log('Parsed Foreigner');
+        console.log(parsedForeigner);
+        if (parsedForeigner.length > 0)
+        {
+            parsedPrimer.foreignKey = parsedForeigner;
+            console.log(parsedPrimer.foreignKey);
+            
+
+        };
+    };
+    console.log(`Primer`);
+    console.log(primer);
+
 }
 
 // /**
