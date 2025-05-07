@@ -25,20 +25,22 @@ document.addEventListener('DOMContentLoaded', async function()
     for (let parsedStudentKey in tablesData.student)
     {
         const parsedStudent = tablesData.student[parsedStudentKey];
-        console.log(parsedStudent)
+        // console.log(parsedStudent)
+
         const studentLoan = Object.values(tablesData.loan).find(
             studentLoan => studentLoan.STUDENT_ID === parsedStudent.STUDENT_ID);
         if (!studentLoan) continue;
-        console.log(studentLoan)
+        // console.log(studentLoan)
 
         const detailsOfLoan = Object.values(tablesData.loanDetail).find(
             detailsOfLoan => detailsOfLoan.LOAN_ID === studentLoan.LOAN_ID);
         if (!detailsOfLoan) continue;
-        console.log(detailsOfLoan)
+        // console.log(detailsOfLoan)
+
         const loanedComputer = Object.values(tablesData.computer).find(
             loanedComputer => loanedComputer.COMPUTER_ID === detailsOfLoan.COMPUTER_ID);
         if (!loanedComputer) continue;
-        console.log(loanedComputer)
+
         parsedStudent.COMPUTER = loanedComputer;
     };
     
@@ -102,7 +104,18 @@ async function addToTab(tableName)
 
             newRow.appendChild(newColumnValue);
             newColumnValue.className = "tableValueCell";
-            newColumnValue.textContent = val;
+            console.log(`Keys: ${key} Value: ${val}`)
+            if (key == 'COMPUTER')
+            {
+                const computerInfo = tableName.COMPUTER.MODEL
+                newColumnValue.textContent = computerInfo;
+
+            }
+            else
+            {
+                newColumnValue.textContent = val;
+
+            };
 
         });
        
@@ -148,8 +161,8 @@ async function tab(tableToDisplay)
  */
 async function joinForeignKeys(foreigner, primer, newPropName)
 {
-    console.log(`Foreigner`);
-    console.log(foreigner);
+    // console.log(`Foreigner`);
+    // console.log(foreigner);
     for (let parsedPrimerKey in foreigner)
     {
         const parsedPrimer = primer[parsedPrimerKey];
@@ -159,18 +172,18 @@ async function joinForeignKeys(foreigner, primer, newPropName)
             return parsedForeigner[theKey] === parsedPrimer[theKey];
 
         });
-        console.log('Parsed Foreigner');
-        console.log(parsedForeigner);
+        // console.log('Parsed Foreigner');
+        // console.log(parsedForeigner);
         if (parsedForeigner.length > 0)
         {
             parsedPrimer[newPropName] = Object.keys(parsedForeigner)[0];
-            console.log('Testing new prop name.');
-            console.log(parsedPrimer[newPropName]);
+            // console.log('Testing new prop name.');
+            // console.log(parsedPrimer[newPropName]);
             
 
         };
     };
-    console.log(`Primer`);
-    console.log(primer);
+    // console.log(`Primer`);
+    // console.log(primer);
 
 }
