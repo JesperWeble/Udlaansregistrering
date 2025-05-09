@@ -44,16 +44,39 @@ document.addEventListener('DOMContentLoaded', async function()
         parsedStudent.COMPUTER = loanedComputer;
     };
     
-    // joinForeignKeys(tablesData.loanDetail, tablesData.computer, 'foreignKey');
-    // joinForeignKeys(tablesData.loanDetail, tablesData.loan, 'foreignKey');
-    // joinForeignKeys(tablesData.loan, tablesData.student, 'foreignKey');
+    for (let parsedComputerKey in tablesData.computer)
+    {
+        const parsedComputer = tablesData.computer[parsedComputerKey];
+        console.log(parsedComputer)
+
+        const computerLoanDetail = Object.values(tablesData.loanDetail).find(
+            computerLoanDetail => computerLoanDetail.COMPUTER_ID === parsedComputer.COMPUTER_ID
+        );
+        // console.log(computerLoan.COMPUTER_ID)
+        if (!computerLoan) continue;
+
+        const detailsOfLoan = Object.values(tablesData.loanDetail).find(
+            detailsOfLoan => detailsOfLoan.LOAN_ID === computerLoan.LOAN_ID);
+        // console.log(detailsOfLoan)
+        if (!detailsOfLoan) continue;
+
+        const loaningStudent = Object.values(tablesData.student).find(
+            loaningStudent => loaningStudent.STUDENT_ID === detailsOfLoan.STUDENT_ID);
+        // console.log(loaningStudent)
+        if (!loaningStudent) continue;
+
+        
+
+        parsedComputer.STUDENT = loaningStudent;
+    };
+    
 
     addToTab('student')
     addToTab('computer')
 
+});
 
 
-})
 async function fetchData(tableName)
 {
     try
@@ -71,7 +94,7 @@ async function fetchData(tableName)
     {
         console.error('There was a problem fetching the data:', error);
     }
-}
+};
 
 // Create html elements for the table to display the data.
 async function addToTab(tableName)
@@ -104,11 +127,18 @@ async function addToTab(tableName)
 
             newRow.appendChild(newColumnValue);
             newColumnValue.className = "tableValueCell";
-            console.log(`Keys: ${key} Value: ${val}`)
+            // console.log(`Keys: ${key} Value: ${val}`)
             if (key == 'COMPUTER')
             {
                 const computerInfo = tableName.COMPUTER.MODEL
                 newColumnValue.textContent = computerInfo;
+
+            }
+            else if (key == 'STUDENT')
+            {
+                const studentInfo = tableName.STUDENT.NAVN
+                console.log(studentInfo);
+                newColumnValue.textContent = studentInfo;
 
             }
             else
@@ -121,7 +151,7 @@ async function addToTab(tableName)
        
     });
     
-}
+};
 
 
 async function toggleDetails(tableId)
@@ -152,38 +182,4 @@ async function tab(tableToDisplay)
     tableContainer.style.display = 'flex';
 
     
-}
-
-/**
- * @param {var} foreigner - The object that will be added to the primer.
- * @param {var} primer - The object that the foreigner will be added to.
- * @param {var} newPropName - The name of the new property that will be added to the primer.
- */
-async function joinForeignKeys(foreigner, primer, newPropName)
-{
-    // console.log(`Foreigner`);
-    // console.log(foreigner);
-    for (let parsedPrimerKey in foreigner)
-    {
-        const parsedPrimer = primer[parsedPrimerKey];
-        const theKey = Object.keys(parsedPrimer)[0];
-        const parsedForeigner = Object.values(foreigner).filter(parsedForeigner => 
-        {
-            return parsedForeigner[theKey] === parsedPrimer[theKey];
-
-        });
-        // console.log('Parsed Foreigner');
-        // console.log(parsedForeigner);
-        if (parsedForeigner.length > 0)
-        {
-            parsedPrimer[newPropName] = Object.keys(parsedForeigner)[0];
-            // console.log('Testing new prop name.');
-            // console.log(parsedPrimer[newPropName]);
-            
-
-        };
-    };
-    // console.log(`Primer`);
-    // console.log(primer);
-
-}
+};
