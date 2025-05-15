@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', async function()
     (
         '%c'+`[--- Tables ---]:`, 'font-size: 14px; font-weight: bold; color: blue;', tablesData
     );
+    // console.log(Array.isArray(tablesData.loan))
 
     // Mapping and Joining
     for (let parsedStudentKey in tablesData.student)
@@ -41,33 +42,8 @@ document.addEventListener('DOMContentLoaded', async function()
             loanedComputer => loanedComputer.COMPUTER_ID === detailsOfLoan.COMPUTER_ID);
         if (!loanedComputer) continue;
 
-        parsedStudent.COMPUTER = loanedComputer;
-    };
-    
-    for (let parsedComputerKey in tablesData.computer)
-    {
-        const parsedComputer = tablesData.computer[parsedComputerKey];
-        console.log(parsedComputer)
-
-        const computerLoanDetail = Object.values(tablesData.loanDetail).find(
-            computerLoanDetail => computerLoanDetail.COMPUTER_ID === parsedComputer.COMPUTER_ID
-        );
-        // console.log(computerLoan.COMPUTER_ID)
-        if (!computerLoan) continue;
-
-        const detailsOfLoan = Object.values(tablesData.loanDetail).find(
-            detailsOfLoan => detailsOfLoan.LOAN_ID === computerLoan.LOAN_ID);
-        // console.log(detailsOfLoan)
-        if (!detailsOfLoan) continue;
-
-        const loaningStudent = Object.values(tablesData.student).find(
-            loaningStudent => loaningStudent.STUDENT_ID === detailsOfLoan.STUDENT_ID);
-        // console.log(loaningStudent)
-        if (!loaningStudent) continue;
-
-        
-
-        parsedComputer.STUDENT = loaningStudent;
+        parsedStudent.COMPUTER = loanedComputer; // Set student to point at Computer
+        loanedComputer.STUDENT = parsedStudent; // Set computer to point at Student
     };
     
 
@@ -127,17 +103,24 @@ async function addToTab(tableName)
 
             newRow.appendChild(newColumnValue);
             newColumnValue.className = "tableValueCell";
-            // console.log(`Keys: ${key} Value: ${val}`)
+            if(objectName == 'PC-2021X')
+            {
+                console.log(tableName)
+                console.log(`Table: ${objectName} Keys: ${key} Value: ${val}`)
+                console.log(val)
+            }
+            
             if (key == 'COMPUTER')
             {
                 const computerInfo = tableName.COMPUTER.MODEL
+                console.log(`Student ${objectName} has loaned ${computerInfo}`);
                 newColumnValue.textContent = computerInfo;
 
             }
             else if (key == 'STUDENT')
             {
                 const studentInfo = tableName.STUDENT.NAVN
-                console.log(studentInfo);
+                console.log(`Computer ${objectName} was loaned by ${studentInfo}`);
                 newColumnValue.textContent = studentInfo;
 
             }
