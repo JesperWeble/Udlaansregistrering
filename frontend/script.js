@@ -23,27 +23,41 @@ document.addEventListener('DOMContentLoaded', async function()
     // console.log(Array.isArray(tablesData.loan))
 
     // Mapping and Joining
+    for (let parsedComputerKey in tablesData.computer)
+    {
+        const parsedComputer = tablesData.computer[parsedComputerKey];
+        parsedComputer.STUDENT = "None";
+    }
+
     for (let parsedStudentKey in tablesData.student)
     {
+        let conditionSuccess = false;
         const parsedStudent = tablesData.student[parsedStudentKey];
         // console.log(parsedStudent)
+        Conditions:
+        {
+            const studentLoan = Object.values(tablesData.loan).find(
+                studentLoan => studentLoan.STUDENT_ID === parsedStudent.STUDENT_ID);
+            if (!studentLoan) break Conditions;
 
-        const studentLoan = Object.values(tablesData.loan).find(
-            studentLoan => studentLoan.STUDENT_ID === parsedStudent.STUDENT_ID);
-        if (!studentLoan) continue;
-        // console.log(studentLoan)
+            const detailsOfLoan = Object.values(tablesData.loanDetail).find(
+                detailsOfLoan => detailsOfLoan.LOAN_ID === studentLoan.LOAN_ID);
+            if (!detailsOfLoan) break Conditions;
 
-        const detailsOfLoan = Object.values(tablesData.loanDetail).find(
-            detailsOfLoan => detailsOfLoan.LOAN_ID === studentLoan.LOAN_ID);
-        if (!detailsOfLoan) continue;
-        // console.log(detailsOfLoan)
+            const loanedComputer = Object.values(tablesData.computer).find(
+                loanedComputer => loanedComputer.COMPUTER_ID === detailsOfLoan.COMPUTER_ID);
+            if (!loanedComputer) break Conditions;
 
-        const loanedComputer = Object.values(tablesData.computer).find(
-            loanedComputer => loanedComputer.COMPUTER_ID === detailsOfLoan.COMPUTER_ID);
-        if (!loanedComputer) continue;
-
-        parsedStudent.COMPUTER = loanedComputer; // Set student to point at Computer
-        loanedComputer.STUDENT = parsedStudent; // Set computer to point at Student
+            parsedStudent.COMPUTER = loanedComputer; // Set student to point at Computer
+            loanedComputer.STUDENT = parsedStudent; // Set computer to point at Student
+            conditionSuccess = true;
+        };
+        if (conditionSuccess == false)
+        {
+            parsedStudent.COMPUTER = "None";
+        }
+            
+        
     };
     
 
@@ -103,25 +117,19 @@ async function addToTab(tableName)
 
             newRow.appendChild(newColumnValue);
             newColumnValue.className = "tableValueCell";
-            if(objectName == 'PC-2021X')
-            {
-                console.log(tableName)
-                console.log(`Table: ${objectName} Keys: ${key} Value: ${val}`)
-                console.log(val)
-            }
             
             if (key == 'COMPUTER')
             {
                 const computerInfo = tableName.COMPUTER.MODEL
-                console.log(`Student ${objectName} has loaned ${computerInfo}`);
                 newColumnValue.textContent = computerInfo;
+                // console.log(`Student ${objectName} has loaned ${computerInfo}`);
 
             }
             else if (key == 'STUDENT')
             {
                 const studentInfo = tableName.STUDENT.NAVN
-                console.log(`Computer ${objectName} was loaned by ${studentInfo}`);
                 newColumnValue.textContent = studentInfo;
+                // console.log(`Computer ${objectName} was loaned by ${studentInfo}`);
 
             }
             else
@@ -136,6 +144,20 @@ async function addToTab(tableName)
     
 };
 
+// Updates displayed data of a "tables" element (such as "Jens Jensen")
+async function updateTable(object)
+{
+    const table = document.getElementById(elementID);
+    if(table.COMPUTER)
+    {
+        table.textContent = object.COMPUTER
+    }
+    if(table.STUDENT)
+    {
+        table.textContent = object.STUDENT
+    }
+    object.STUDENT
+}
 
 async function toggleDetails(tableId)
 {
@@ -152,9 +174,10 @@ async function toggleDetails(tableId)
             tableRow.style.display = 'inherit';
         }
     });
+    
 };
 
-// Change displayed data
+// Changes displayed data when one of the html tab buttons are clicked.
 async function tab(tableToDisplay)
 {
     // Hide all containers.
