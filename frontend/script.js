@@ -39,10 +39,12 @@ document.addEventListener('DOMContentLoaded', async function()
             const studentLoan = Object.values(tablesData.loan).find(
                 studentLoan => studentLoan.STUDENT_ID === parsedStudent.STUDENT_ID);
             if (!studentLoan) break Conditions;
+            parsedStudent.LOAN = studentLoan;
 
             const detailsOfLoan = Object.values(tablesData.loanDetail).find(
                 detailsOfLoan => detailsOfLoan.LOAN_ID === studentLoan.LOAN_ID);
             if (!detailsOfLoan) break Conditions;
+            parsedStudent.LOAN_DETAIL = detailsOfLoan;
 
             const loanedComputer = Object.values(tablesData.computer).find(
                 loanedComputer => loanedComputer.COMPUTER_ID === detailsOfLoan.COMPUTER_ID);
@@ -96,48 +98,65 @@ async function addToTab(tableName)
         const objectName = Object.values(tableName)[1];
         const objectEntries = Object.entries(tableName).slice(2);
         const newTable = document.createElement("table");
-        
         tableContainer.appendChild(newTable);
         newTable.className = "tables"; 
         newTable.id = objectName;
         newTable.innerHTML = `<h3>${objectName}</h3>`;
+
+        if (tableName.LOAN)
+        {
+            const expirationDate = tableName.LOAN.EXPIRATION_DATE;
+            const currentDate = new Date();
+            console.log(`Expiration date: ${new Date(expirationDate)}`)
+            console.log(`Current date: ${currentDate}`)
+            if (new Date(expirationDate) < currentDate)
+            {
+                console.log(`Expired`)
+                newTable.innerHTML = `${newTable.innerHTML} - Expired Loan`
+                newTable.style.color = 'red';
+            }
+
+        }
+        
         newTable.onclick = () => toggleDetails(newTable.id);
         objectEntries.forEach(([key, val]) => 
         {
-            const newRow = document.createElement("tr");
-            const newColumnKey = document.createElement("td");
-            const newColumnValue = document.createElement("td");
-            newTable.appendChild(newRow);
-            newRow.className = "tableRows";
-            newRow.id = key;
-            
-            newRow.appendChild(newColumnKey);
-            newColumnKey.className = "tableKeyCell";
-            newColumnKey.textContent = key;
-
-            newRow.appendChild(newColumnValue);
-            newColumnValue.className = "tableValueCell";
-            
-            if (key == 'COMPUTER')
-            {
-                const computerInfo = tableName.COMPUTER.MODEL
-                newColumnValue.textContent = computerInfo;
-                // console.log(`Student ${objectName} has loaned ${computerInfo}`);
-
-            }
-            else if (key == 'STUDENT')
-            {
-                const studentInfo = tableName.STUDENT.NAVN
-                newColumnValue.textContent = studentInfo;
-                // console.log(`Computer ${objectName} was loaned by ${studentInfo}`);
-
-            }
+            if (key == 'LOAN' || key == 'LOAN_DETAIL'){} // do not display these
             else
             {
-                newColumnValue.textContent = val;
+                const newRow = document.createElement("tr");
+                const newColumnKey = document.createElement("td");
+                const newColumnValue = document.createElement("td");
+                newTable.appendChild(newRow);
+                newRow.className = "tableRows";
+                newRow.id = key;
+                
+                newRow.appendChild(newColumnKey);
+                newColumnKey.className = "tableKeyCell";
+                newColumnKey.textContent = key;
 
-            };
+                newRow.appendChild(newColumnValue);
+                newColumnValue.className = "tableValueCell";
+                if (key == 'COMPUTER')
+                {
+                    const computerInfo = tableName.COMPUTER.MODEL
+                    newColumnValue.textContent = computerInfo;
+                    // console.log(`Student ${objectName} has loaned ${computerInfo}`);
 
+                }
+                else if (key == 'STUDENT')
+                {
+                    const studentInfo = tableName.STUDENT.NAVN
+                    newColumnValue.textContent = studentInfo;
+                    // console.log(`Computer ${objectName} was loaned by ${studentInfo}`);
+
+                }
+                else
+                {
+                    newColumnValue.textContent = val;
+
+                };
+            }
         });
        
     });
