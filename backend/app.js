@@ -3,9 +3,16 @@ const oracleDatabase = require('oracledb');
 const config = require ('./config'); // Where passwords and such for the database is written.
 const app = express(); // creates an app that can be interacted with for Express.
 const cors = require('cors'); // a security feature in web browsers
-
+const transporter = require('./mailer'); // Allowing for emails.
+app.use(express.static('frontend'))
+app.use(express.json())
 app.use(cors());
 const port = 3000;
+
+
+
+
+
 
 async function getDataFromDatabase(table)
 {
@@ -39,6 +46,16 @@ async function getDataFromDatabase(table)
     }
 }
 
+async function sendEmail(msg)
+{
+    transporter.sendMail({
+        from: 'jespers_sop_test@outlook.com',
+        to: 'jespers_sop_test@outlook.com',
+        subject: 'Testing sending emails through node.js nodemailer',
+        text: msg,
+    });
+}
+
 // Send data to Frontend
 app.get('/:table', async (req, res) =>
 {
@@ -56,8 +73,26 @@ app.get('/:table', async (req, res) =>
     }
 });
 
+app.post('/send-email', async (req, res) => {
+    try
+    {
+        await sendEmail(req.body.msg)
+        res.status(200).json({ success: true })
+    }
+    catch
+    {
+        res.status(500).json({ success: false, error: error.message })
+    }
+    
+})
+
 app.listen(port, () =>
 {
     console.log(`Server is running on http://localhost:${port}`);
 });
+
+
+
+
+
 
