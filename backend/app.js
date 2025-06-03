@@ -9,11 +9,6 @@ app.use(express.json())
 app.use(cors());
 const port = 3000;
 
-
-
-
-
-
 async function getDataFromDatabase(table)
 {
     let connection;

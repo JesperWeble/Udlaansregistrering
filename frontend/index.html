@@ -8,14 +8,31 @@
     <script src="script.js"></script>
 </head>
 <body>
-    <div class="tab">
-        <ul class="tab_buttons">
-            <li><button onclick="tab('student')">Students</button></li>
-            <li><button onclick="tab('computer')">Computers</button></li>
-        </ul>
-        
-        <div class="table_container" id="student_container"></div>                      
-        <div class="table_container" id="computer_container"></div>
+    <nav>
+        <li><button onclick="tab('registration')">Registration</button></li>
+        <li><button onclick="tab('student')">View Students</button></li>
+        <li><button onclick="tab('computer')">View Available Computers</button></li>
+    </nav>
+
+    <div class="page" id="page_registration">
+
+    </div>
+
+    <div class="page" id="page_overview">
+        <div class="tab">
+            <ul class="tab_buttons">
+                <li><button onclick="tab('student')">Students</button></li>
+                <li><button onclick="tab('computer')">Computers</button></li>
+            </ul>
+            
+            <div class="table_container" id="student_container"></div>                      
+            <div class="table_container" id="computer_container"></div>
+        </div>
+
+    </div>
+
+    <div class="page" id="page_itemDetails">
+
     </div>
     
 
