@@ -88,14 +88,14 @@ async function fetchData(tableName)
     }
 };
 
-async function sendEmail(msg)
-{
-    fetch('/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json'},
-        bod: JSON.stringify({msg: msg}),
-    });
-};
+// async function sendEmail(msg)
+// {
+//     fetch('/send-email', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json'},
+//         bod: JSON.stringify({msg: msg}),
+//     });
+// };
 
 // Create html elements for the table to display the data.
 async function addToTab(tableName)
@@ -202,7 +202,6 @@ async function toggleDetails(tableId)
             tableRow.style.display = 'inherit';
         }
     });
-    sendEmail("Hello world!")
     
 };
 

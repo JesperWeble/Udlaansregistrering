@@ -41,16 +41,6 @@ async function getDataFromDatabase(table)
     }
 }
 
-async function sendEmail(msg)
-{
-    transporter.sendMail({
-        from: 'jespers_sop_test@outlook.com',
-        to: 'jespers_sop_test@outlook.com',
-        subject: 'Testing sending emails through node.js nodemailer',
-        text: msg,
-    });
-}
-
 // Send data to Frontend
 app.get('/:table', async (req, res) =>
 {
@@ -67,19 +57,6 @@ app.get('/:table', async (req, res) =>
         res.status(500).send(`Error fetching ${tableName} data.`);
     }
 });
-
-app.post('/send-email', async (req, res) => {
-    try
-    {
-        await sendEmail(req.body.msg)
-        res.status(200).json({ success: true })
-    }
-    catch
-    {
-        res.status(500).json({ success: false, error: error.message })
-    }
-    
-})
 
 app.listen(port, () =>
 {
