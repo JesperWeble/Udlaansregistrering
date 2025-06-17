@@ -77,3 +77,8 @@ h3 {
   margin: 0;
   padding: 0;
 }
+.emailButton {
+  display: none;
+  color: #0f0;
+  background-color: #050f05;
+}

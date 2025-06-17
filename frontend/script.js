@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async function()
 });
 
 
-async function fetchData(tableName)
+async function fetchData(tableName) // fetches data from the backend via the app.get() code
 {
     try
     {
@@ -123,6 +123,16 @@ async function addToTab(tableName)
                 console.log(`Expired`)
                 newTable.innerHTML = `${newTable.innerHTML} - Expired Loan`
                 newTable.style.color = 'red';
+                const newEmailButton = document.createElement("button");
+                newTable.appendChild(newEmailButton)
+                newEmailButton.className = 'emailButton'
+                newEmailButton.innerHTML = 'Send Email'
+                newEmailButton.onclick = async function(event)
+                {
+                    event.stopPropagation
+                    await sendMail()
+                }
+
             }
 
         }
@@ -217,3 +227,35 @@ async function tab(tableToDisplay)
 
     
 };
+
+async function sendMail()
+{
+    alert("Advarselsbesked var sendt.")
+    // Add email function here when finished
+}
+
+async function registerLoan()
+{
+    var studentId = document.getElementById('registryInput_studentId').value
+    var studentName = document.getElementById('registryInput_studentName').value
+    var cpr = document.getElementById('registryInput_cpr').value
+    var email = document.getElementById('registryInput_email').value
+    var klass = document.getElementById('registryInput_klass').value
+    var address = document.getElementById('registryInput_address').value
+    var zip = document.getElementById('registryInput_zip').value
+    var computerId = document.getElementById('registryInput_computerId').value
+    var mouse = document.getElementById('registryInput_mouse').value
+    
+    alert("Udlån blev registreret!")
+    const post = await fetch (`http://localhost:3000/POST`,
+    {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ STUDENT_ID: studentId, COMPUTER_ID: computerId })
+
+    });
+
+    // Add post to database function here when finished
+
+
+}
