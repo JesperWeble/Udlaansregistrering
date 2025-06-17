@@ -18,7 +18,7 @@
         <div class="table_container" id="registration_container">
             <form>
                 <label for="registryInput_studentId">Student Id</label>
-                <input type="number" id="registryInput_studentId">
+                <input type="number" id="registryInput_studentId" oninput="autoFillFields(this.value)">
 
                 <label for="registryInput_studentName">Name</label>
                 <input type="text" id="registryInput_studentName">

@@ -3,7 +3,9 @@ let student;
 let computer;
 let loan;
 let loanDetail;
-
+// —————————————————————————————————————————————
+// Event Listeners
+// —————————————————————————————————————————————
 document.addEventListener('DOMContentLoaded', async function()
 {
     tablesData = 
@@ -69,6 +71,9 @@ document.addEventListener('DOMContentLoaded', async function()
 });
 
 
+// —————————————————————————————————————————————
+// Functions
+// —————————————————————————————————————————————
 async function fetchData(tableName) // fetches data from the backend via the app.get() code
 {
     try
@@ -100,27 +105,28 @@ async function fetchData(tableName) // fetches data from the backend via the app
 // Create html elements for the table to display the data.
 async function addToTab(tableName)
 {
+    const tableDefinition = tableName
     const tableContainer = document.getElementById(`${tableName}_container`);
     const data = tablesData[tableName];
     data.forEach(tableName => 
     {
+        const objectId = Object.values(tableName)[0];
         const objectName = Object.values(tableName)[1];
         const objectEntries = Object.entries(tableName).slice(2);
         const newTable = document.createElement("table");
         tableContainer.appendChild(newTable);
         newTable.className = "tables"; 
-        newTable.id = objectName;
+        newTable.id = `${tableDefinition}${objectId}`;
+        newTable.setAttribute('navn', objectName);
+        newTable.setAttribute(`${tableDefinition}_id`, objectId);
         newTable.innerHTML = `<h3>${objectName}</h3>`;
 
         if (tableName.LOAN)
         {
             const expirationDate = tableName.LOAN.EXPIRATION_DATE;
             const currentDate = new Date();
-            console.log(`Expiration date: ${new Date(expirationDate)}`)
-            console.log(`Current date: ${currentDate}`)
             if (new Date(expirationDate) < currentDate)
             {
-                console.log(`Expired`)
                 newTable.innerHTML = `${newTable.innerHTML} - Expired Loan`
                 newTable.style.color = 'red';
                 const newEmailButton = document.createElement("button");
@@ -237,15 +243,7 @@ async function sendMail()
 async function registerLoan()
 {
     var studentId = document.getElementById('registryInput_studentId').value
-    var studentName = document.getElementById('registryInput_studentName').value
-    var cpr = document.getElementById('registryInput_cpr').value
-    var email = document.getElementById('registryInput_email').value
-    var klass = document.getElementById('registryInput_klass').value
-    var address = document.getElementById('registryInput_address').value
-    var zip = document.getElementById('registryInput_zip').value
     var computerId = document.getElementById('registryInput_computerId').value
-    var mouse = document.getElementById('registryInput_mouse').value
-    
     alert("Udlån blev registreret!")
     const post = await fetch (`http://localhost:3000/POST`,
     {
@@ -257,5 +255,20 @@ async function registerLoan()
 
     // Add post to database function here when finished
 
+
+}
+
+async function autoFillFields(v)
+{
+    console.log(v)
+    const theStudent = Object.values(student).find(obj => obj.STUDENT_ID === v)
+
+    // const theStudent = document.querySelector(`[student_id="${v}"]`)
+    
+    // console.log(theStudent)
+    // if (theStudent)
+    // {
+    //     document.getElementById('registryInput_studentName').value = theStudent.NAVN;
+    // }
 
 }
