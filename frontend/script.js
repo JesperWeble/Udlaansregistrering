@@ -260,15 +260,28 @@ async function registerLoan()
 
 async function autoFillFields(v)
 {
-    console.log(v)
-    const theStudent = Object.values(student).find(obj => obj.STUDENT_ID === v)
 
-    // const theStudent = document.querySelector(`[student_id="${v}"]`)
-    
-    // console.log(theStudent)
-    // if (theStudent)
-    // {
-    //     document.getElementById('registryInput_studentName').value = theStudent.NAVN;
-    // }
+    for ( const obj of Object.values(tablesData.student))
+    {
+        if (obj.STUDENT_ID == v)
+        {
+            document.getElementById('registryInput_studentName').value = obj.NAVN;
+            document.getElementById('registryInput_cpr').value = obj.CPR;
+            document.getElementById('registryInput_email').value = obj.EMAIL;
+            document.getElementById('registryInput_klass').value = obj.KLASS;
+            document.getElementById('registryInput_address').value = obj.ADDRESS;
+            document.getElementById('registryInput_zip').value = obj.ZIP;
+            break;
+        }
+        else
+        {
+            document.getElementById('registryInput_studentName').value = 'Not found';
+            document.getElementById('registryInput_cpr').value = 0;
+            document.getElementById('registryInput_email').value = 'Not found';
+            document.getElementById('registryInput_klass').value = 'Not found';
+            document.getElementById('registryInput_address').value = 'Not found';
+            document.getElementById('registryInput_zip').value = 0;
+        }
+    }
 
 }
